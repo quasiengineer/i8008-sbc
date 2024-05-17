@@ -1,0 +1,105 @@
+%include "div8x8.i8008"
+%include "div16x8.i8008"
+
+# INPUT:
+#   [D, C, B] - dividend
+#   [H, E] - divisor
+# OUTPUT:
+#   [C, B] - reminder
+#   L - quotient
+# NOTES:
+#   for our use cases, we always have single-digit quotient
+div24x16:
+  XRA
+  ORH
+  JTZ div24x16_divisor1                     # if (divisor[1] === 0x0)
+
+div24x16_divisor2:
+  XRA
+  ORD
+  JFZ div24x16_divisor2_dividend3
+  ORC
+  JFZ div24x16_divisor2_dividend2
+
+div24x16_divisor2_dividend1:
+  LLI 0x00                                  # quotient = 0
+  RET
+
+div24x16_divisor2_dividend3:
+  LLI 0x00                                  # quotient = 0
+
+div24x16_divisor2_dividend3_loop:
+  LAB
+  SUE
+  LBA
+  LAC
+  SBH
+  LCA
+  LAD
+  SBI 0x00
+  LDA                                       # reminder = reminder - divisor
+  INL                                       # quotient++
+  JFC div24x16_divisor2_dividend3_loop      # if (reminder >= 0)
+
+  LAB
+  ADE
+  LBA
+  LAC
+  ACH
+  LCA
+  LAD
+  ACI 0x00
+  LDA                                       # reminder = reminder + divisor
+  DCL                                       # quotient--
+
+  RET
+
+div24x16_divisor2_dividend2:
+  LLI 0x00                                  # quotient = 0
+
+div24x16_divisor2_dividend2_loop:
+  LAB
+  SUE
+  LBA
+  LAC
+  SBH
+  LCA                                       # reminder = reminder - divisor
+  INL                                       # quotient++
+  JFC div24x16_divisor2_dividend2_loop      # if (reminder >= 0)
+
+  LAB
+  ADE
+  LBA
+  LAC
+  ACH
+  LCA                                       # reminder = reminder + divisor
+  DCL                                       # quotient--
+
+  RET
+
+div24x16_divisor1:
+  ORC
+  JTZ div24x16_divisor1_dividend1           # if (dividend[1] === 0x0)
+
+div24x16_divisor1_dividend2:
+  LHC
+  LCE
+  LLB
+  CAL div16x8
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_DIV16_REMINDER_0_ADDR
+  LBM
+  INL
+  LCM
+  INL
+  LLM
+  RET
+
+div24x16_divisor1_dividend1:
+  LDB
+  LCE
+  CAL div8x8
+  LLB
+  LCH
+  LBA
+  RET

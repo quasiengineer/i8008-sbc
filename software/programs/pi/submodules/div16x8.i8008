@@ -1,0 +1,118 @@
+%include "memory.i8008"
+%include "div8x8.i8008"
+
+# INPUT:
+#   [H, L] - dividend
+#   C - divisor
+# OUTPUT:
+#   div16x8_reminder
+#   div16x8_quotient
+# VARIABLES:
+#   [B, E] - d
+#   [D, C] - divisor
+# NOTES:
+#   reminder is always 8-bit, even if it is stored as 16-bit number
+div16x8:
+  LAH
+  LBL
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_DIV16_REMINDER_0_ADDR
+  LMB
+  INL
+  LMA                                       # reminder = dividend
+
+  INL
+  LMI 0x00
+  INL
+  LMI 0x00                                  # quotient = 0
+
+  CPC
+  JTC div16x8_reduced                       # if (dividend[1] < divisor)
+
+  LDA
+  CAL div8x8                                # dividend[1] / divisor
+
+  LMB                                       # quotient[1] = dividend[1] / divisor
+
+  LLI $MEM_VARIABLE_DIV16_REMINDER_1_ADDR
+  LMA                                       # reminder[1] = dividend[1] % divisor
+
+div16x8_reduced:
+  LLI $MEM_VARIABLE_DIV16_REMINDER_0_ADDR
+  LEI 0x01
+  LBI 0x00                                  # d = 1
+  LDB
+
+div16x8_compute_d_loop:
+  LAC
+  SUM
+  LAD
+  INL
+  SBM
+  DCL
+  JFC div16x8_compute_result_loop           # if (divisor >= reminder)
+
+  LAE
+  ADE
+  LEA
+  LAB
+  ACB
+  LBA                                       # d = d << 1
+
+  LAC
+  ADC
+  LCA
+  LAD
+  ACD
+  LDA                                       # divisor = divisor << 1
+
+  JFS div16x8_compute_d_loop                # if (divisor[1] < 0x80)
+
+div16x8_compute_result_loop:
+  LAM
+  SUC
+  INL
+  LAM
+  SBD
+  JTC div16x8_skip_result_update            # if (reminder < divisor)
+
+  LMA
+  DCL
+  LAM
+  SUC
+  LMA                                       # reminder = reminder - divisor
+
+  LLI $MEM_VARIABLE_DIV16_QUOTIENT_0_ADDR
+  LAM
+  ADE
+  LMA
+  INL
+  LAM
+  ACB
+  LMA                                      # quotient = quotient + d
+
+  LLI $MEM_VARIABLE_DIV16_REMINDER_1_ADDR
+
+div16x8_skip_result_update:
+  DCL
+
+  XRA
+  LAD
+  RAR
+  LDA
+  LAC
+  RAR
+  LCA                                       # divisor = divisor >> 1
+
+  XRA
+  LAB
+  RAR
+  LBA
+  LAE
+  RAR
+  LEA                                       # d = d >> 1
+
+  ORB
+  JFZ div16x8_compute_result_loop           # if (d !== 0)
+
+  RET

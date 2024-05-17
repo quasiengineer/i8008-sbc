@@ -1,0 +1,41 @@
+%define MEM_ARRAY_HIGH_ADDR                 0x08
+%define MEM_VARIABLES_HIGH_ADDR             0x3E
+
+%define MEM_VARIABLE_N_ADDR                 0x00
+%define MEM_VARIABLE_LEN_ADDR               0x02
+%define MEM_VARIABLE_PRINTED_ADDR           0x04
+%define MEM_VARIABLE_PREVIOUS_DIGIT_ADDR    0x06
+%define MEM_VARIABLE_NINE_COUNT_ADDR        0x07
+%define MEM_VARIABLE_DIV16_REMINDER_0_ADDR  0x08
+%define MEM_VARIABLE_DIV16_REMINDER_1_ADDR  0x09
+%define MEM_VARIABLE_DIV16_QUOTIENT_0_ADDR  0x0A
+%define MEM_VARIABLE_DIV16_QUOTIENT_1_ADDR  0x0B
+%define MEM_VARIABLE_CARRY_ADDR             0x0C
+%define MEM_VARIABLE_DENOMINATOR_ADDR       0x10
+%define MEM_VARIABLE_NUMERATOR_ADDR         0x12
+%define MEM_VARIABLE_ARR_ITEM_PTR_0_ADDR    0x14
+%define MEM_VARIABLE_ARR_ITEM_PTR_1_ADDR    0x15
+
+# Memory map:
+#   ROM:
+#     0x0000 ... 0x07FF,                    2048  bytes
+#
+#   Global variables:
+#     0x0800 ... 0x3DFF - A,                13824 bytes
+#     0x3E00            - N,                2     bytes
+#     0x3E02            - LEN,              2     bytes
+#     0x3E04            - printed,          2     bytes
+#     0x3E06            - previousDigit,    1     bytes
+#     0x3E07            - nineCount,        1     bytes
+#
+#   Local variables:
+#     0x3E08            - div16x8_reminder  2     bytes
+#     0x3E0A            - div16x8_quotient  2     bytes
+#     0x3E0C            - carry             3     bytes
+#     0x3E10            - denominator       2     bytes
+#     0x3E12            - numerator         2     bytes
+#     0x3E14            - arrItemPtr        2     bytes
+#
+#   NOTE:
+#     All variable bytes should have same high address, e.g. variable at addresses 0x1000 / 0x1001 is valid,
+#       but at addresses 0x100F / 0x1010 - isn't

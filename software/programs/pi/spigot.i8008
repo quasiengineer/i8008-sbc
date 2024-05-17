@@ -1,0 +1,105 @@
+%include "submodules/memory.i8008"
+%include "submodules/globalInit.i8008"
+%include "submodules/updateArray.i8008"
+
+spigot:
+  CAL initGlobalVariables
+
+  LHI $MEM_VARIABLES_HIGH_ADDR
+
+spigot_loop:
+  LLI $MEM_VARIABLE_CARRY_ADDR
+  LMI 0x00
+  INL
+  LMI 0x00
+  INL
+  LMI 0x00                                  # carry = 0
+
+  CAL updateArray
+
+  LLI $MEM_VARIABLE_CARRY_ADDR
+  LAM
+  SUI 10
+  JTC spigot_singleDigitCarry               # if (carry < 10)
+
+  LBA                                       # nextDigit = carry - 10
+  LCI 1                                     # digitFromCarry = 1
+  LDI 0                                     # digitToPrintForNine = 0
+  JMP spigot_checkNextDigit
+
+spigot_singleDigitCarry:
+  LBM                                       # nextDigit = carry
+  LCI 0                                     # digitFromCarry = 0
+  LDI 9                                     # digitToPrintForNine = 9
+
+spigot_checkNextDigit:
+  LAI 9
+  CPB
+  JFZ spigot_printDigit                     # if (nextDigit !== 9)
+
+  LLI $MEM_VARIABLE_NINE_COUNT_ADDR
+  LBM
+  INB
+  LMB                                       # nineCount++
+  JMP spigot_loop
+
+spigot_printDigit:
+  LLI $MEM_VARIABLE_PREVIOUS_DIGIT_ADDR
+  LAC
+  ADM
+  OUT 8                                     # print (previousDigit + digitFromCarry)
+
+  LMB                                       # previousDigit = nextDigit
+
+  LLI $MEM_VARIABLE_PRINTED_ADDR
+  LBM
+  INB
+  LMB
+  JFZ spigot_skipPrintedHighDigitUpdate
+  INL
+  LBM
+  INB
+  LMB                                       # printed++
+
+spigot_skipPrintedHighDigitUpdate:
+  LLI $MEM_VARIABLE_NINE_COUNT_ADDR
+  LBM                                       # i = nineCount
+
+  XRA
+  CPB
+  JTZ spigot_checkPrinted                   # if (nineCount === 0)
+
+spigot_printNines_loop:
+  LAD
+  OUT 8                                     # print (digitToPrintForNine)
+
+  LLI $MEM_VARIABLE_PRINTED_ADDR
+  LCM
+  INC
+  LMC
+  JFZ spigot_skipPrintedHighDigitUpdate2
+  INL
+  LCM
+  INC
+  LMC                                       # printed++
+
+spigot_skipPrintedHighDigitUpdate2:
+  DCB                                       # i--
+  JFZ spigot_printNines_loop                # if (i > 0)
+
+  LLI $MEM_VARIABLE_NINE_COUNT_ADDR
+  LMI 0x00                                  # nineCount = 0
+
+spigot_checkPrinted:
+  LLI $MEM_VARIABLE_PRINTED_ADDR
+  LAM
+  INL
+  LBM
+  LLI $MEM_VARIABLE_N_ADDR
+  SUM
+  INL
+  LAB
+  SBM
+  JTC spigot_loop                           # if (printed < N)
+
+  HLT                                       # finish

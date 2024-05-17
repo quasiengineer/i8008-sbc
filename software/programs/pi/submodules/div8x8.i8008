@@ -1,0 +1,20 @@
+# INPUT:
+#   D - dividend
+#   C - divisor
+# OUTPUT:
+#   A - reminder
+#   B - quotient
+# NOTES:
+#   C/D - unmodified
+div8x8:
+  LAD              # reminder = dividend
+  LBI 0x00         # quotient = 0
+
+div8x8_loop:
+  SUC              # reminder = reminder - divisor
+  INB              # quotient = quotient + 1
+  JFC div8x8_loop  # if (reminder >= 0)
+
+  ADC              # reminder = reminder + divisor
+  DCB              # quotient = quotient - 1
+  RET

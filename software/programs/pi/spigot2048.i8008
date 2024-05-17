@@ -1,0 +1,10 @@
+%include "submodules/memory.i8008"
+%include "spigot.i8008"
+
+entrypoint:
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_N_ADDR
+  INL
+  LMI 0x08                          # N = 2048
+
+  JMP spigot

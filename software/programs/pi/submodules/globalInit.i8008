@@ -1,0 +1,86 @@
+%include "memory.i8008"
+%include "mul16x8.i8008"
+%include "div16x8.i8008"
+
+# INPUT:
+#   N
+# OUTPUT:
+#   LEN
+computeArrayLength:
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_N_ADDR
+  LAM
+  INL
+  LBM                                       # [B, A] = N
+
+  LCI 10
+  CAL mul16x8                               # [E, H, L] = N * 10
+
+  LCI 3
+  CAL div16x8                               # (N * 10) / 3
+
+  LLI $MEM_VARIABLE_DIV16_QUOTIENT_0_ADDR
+  LAI 0x01
+  ADM
+  LBA
+  INL
+  XRA
+  ACM
+  LLI $MEM_VARIABLE_LEN_ADDR
+  LMB
+  INL
+  LMA                                       # LEN = ((N * 10) / 3) + 1
+
+  RET
+
+# INPUT:
+#   LEN
+# OUTPUT:
+#   A
+initArray:
+  LLI $MEM_VARIABLE_LEN_ADDR
+  LCM
+  INL
+  LDM                                       # [D, C] = LEN
+
+  LAI 0xFF
+
+  LHI $MEM_ARRAY_HIGH_ADDR
+  LLI 0x00
+
+initArray_loop:
+  LMI 0x02
+  INL
+  LMI 0x00
+  INL                                       # a[i] = 2
+
+  JFZ initArray_decIterator
+  INH
+
+initArray_decIterator:
+  DCC
+  CPC
+  JFZ initArray_loop
+  DCD
+  CPD
+  JFZ initArray_loop                        # if (i <= LEN)
+
+  RET
+
+initGlobalVariables:
+  CAL computeArrayLength
+
+  INL
+  LMI 0x00
+  INL
+  LMI 0x00                                  # printed = 0
+
+  INL
+  LMI 0x02                                  # previousDigit = 2
+
+  INL
+  LMI 0x00                                  # nineCount = 0
+
+  CAL initArray
+
+  RET

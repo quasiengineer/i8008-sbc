@@ -1,0 +1,143 @@
+%include "memory.i8008"
+%include "mul16x8.i8008"
+%include "div24x16.i8008"
+
+# INPUT:
+#   A
+#   LEN
+# OUTPUT:
+#   A
+#   carry
+updateArray:
+  LLI $MEM_VARIABLE_LEN_ADDR
+  LCM
+  INL
+  LDM
+  LLI $MEM_VARIABLE_DENOMINATOR_ADDR
+  DCC
+  LMC
+  LAI 0xFF
+  CPC
+  JFZ updateArray_denominatorInitialization_highWord
+  DCD
+updateArray_denominatorInitialization_highWord:
+  INL
+  LMD                                                 # denominator = LEN - 1
+
+  RRC                                                 # set carry = 1, to calculate (LEN - 1) + (LEN - 1) + 1 = 2 * LEN - 1
+  LAC
+  ACC
+  INL
+  LMA
+  LAD
+  ACD
+  INL
+  LMA                                                 # numerator = 2 * LEN - 1
+
+  INL
+  XRA
+  LMA
+  INL
+  LMI $MEM_ARRAY_HIGH_ADDR                            # arrItemPtr = &A[0]
+
+updateArray_loop:
+  LLI $MEM_VARIABLE_ARR_ITEM_PTR_1_ADDR
+  LHM
+  LLA
+
+  LAM
+  INL
+  LBM
+  LCI 10
+  CAL mul16x8                                         # [E, H, L] = arrItem * 10
+
+  LDH
+  LCL
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_CARRY_ADDR
+  LAM
+  ADC
+  LBA
+  INL
+  LAM
+  ACD
+  LCA
+  INL
+  LAM
+  ACE
+  LDA                                                 # arrItem * 10 + carry
+
+  LLI $MEM_VARIABLE_NUMERATOR_ADDR
+  LEM
+  INL
+  LHM
+  CAL div24x16                                        # (arrItem * 10 + carry) / numerator
+
+  LEL
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_ARR_ITEM_PTR_0_ADDR
+  LAM
+  INL
+  LHM
+  LLA
+  LMB
+  INL
+  LMC                                                 # arrItem = (arrItem * 10 + carry) % numerator
+
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_DENOMINATOR_ADDR
+  LAM
+  INL
+  LBM
+  LCE
+  CAL mul16x8                                         # denominator * ((arrItem * 10 + carry) / numerator)
+
+  LBH
+  LCL
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_CARRY_ADDR
+  LMC
+  INL
+  LMB
+  INL
+  LME                                                 # carry = denominator * ((arrItem * 10 + carry) / numerator)
+
+  LHI $MEM_VARIABLES_HIGH_ADDR
+  LLI $MEM_VARIABLE_DENOMINATOR_ADDR
+  LDM
+  DCD
+  LMD
+  INL
+  LAI 0xFF
+  CPD
+  JFZ updateArray_denominatorUpdate_skipHighWord
+  LEM
+  DCE
+  LME
+updateArray_denominatorUpdate_skipHighWord:           # denominator = denominator - 1
+  LAM
+  ORD
+  RTZ                                                 # if (denominator === 0) return;
+  INL
+
+  LBI 0x2
+  LAM
+  SUB
+  LMA
+  INL
+  JFC updateArray_numeratorUpdate_skipHighWord
+  LCM
+  DCC
+  LMC
+updateArray_numeratorUpdate_skipHighWord:
+  INL                                                # numerator = numerator - 2
+
+  LAM
+  ADB
+  LMA
+  JFC updateArray_loop
+  INL
+  LBM
+  INB
+  LMB
+  JMP updateArray_loop                                # arrItemPtr = arrItemPtr + 2

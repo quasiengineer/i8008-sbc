@@ -1,0 +1,32 @@
+write_incH: LHI 0x01
+            LLI 0x00
+write_incL: LMH
+            INL
+            LML
+            INL
+            JFZ write_incL
+            INH
+            LAH
+            CPI 0x40
+            JFZ write_incH
+            LHI 0x01
+read_incH:  LLI 0x00
+read_incL:  LAM
+            CPH
+            JFZ error
+            INL
+            LAM
+            CPL
+            JFZ error
+            INL
+            JFZ read_incL
+            INH
+            LAH
+            CPI 0x40
+            JFZ read_incH
+            LHI 0x00
+error:      LAH
+            OUT 8
+            HLT
+
+

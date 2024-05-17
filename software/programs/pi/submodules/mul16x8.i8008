@@ -1,0 +1,27 @@
+%include "mul8x8.i8008"
+
+# INPUT:
+#   [B, A] - first term
+#   C - second term
+# OUTPUT:
+#   [E, H, L] - product
+mul16x8:
+  LEB              # tmp = a1
+
+  LDA
+  CAL mul8x8       # [B, A] = a0 * b
+
+  LLA              # r0 = low(a0 * b)
+  LHB              # r1 = high(a0 * b)
+
+  LDE
+  CAL mul8x8       # [B, A] = a1 * b
+
+  ADH
+  LHA              # r1 = r1 + low(a1 * b)
+
+  LEB              # r2 = high(a1 * b)
+  RFC              # if (!carry)
+
+  INE              # r2 = r2 + 1
+  RET

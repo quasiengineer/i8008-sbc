@@ -1,0 +1,233 @@
+(footprint "EVPAWCD4A"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "EVPAWCD4A")
+	(tags "Switch")
+	(property "Reference" "S**"
+		(at -0.125 0 0)
+		(layer "F.SilkS")
+		(uuid "5f9dc2d9-c6fb-467d-a9d3-f1012feea976")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Value" "EVPAWCD4A"
+		(at -0.125 0 0)
+		(layer "F.SilkS")
+		(hide yes)
+		(uuid "9a421a84-b90d-4767-adf3-5f767e025e28")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(property "Footprint" "EVPAWCD4A"
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "12ccdd19-b94b-4679-b847-27728e836245")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8f16c0c5-8575-49b8-90de-52930dec5660")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "62f2bf83-57c1-420a-ab6d-fd29fb0f3474")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2.1 -1)
+		(end 1.15 -1)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "bfbfc6bc-9b0f-42e3-9b3e-94d9cd4d0596")
+	)
+	(fp_line
+		(start -2.1 1)
+		(end 1.15 1)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0971798a-5001-490f-b3ed-65d7ee9c3a1a")
+	)
+	(fp_line
+		(start 2.025 -0.2)
+		(end 2.025 -0.2)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ad25a9f8-5865-47f5-baf9-ad38a802a4b6")
+	)
+	(fp_line
+		(start 2.025 0)
+		(end 2.025 0)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "d498cbca-1972-4417-a90e-dc3f65ea7967")
+	)
+	(fp_arc
+		(start 2.025 -0.2)
+		(mid 2.125 -0.1)
+		(end 2.025 0)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "01a9b9c4-98ca-4196-af53-816a4665df58")
+	)
+	(fp_arc
+		(start 2.025 0)
+		(mid 1.925 -0.1)
+		(end 2.025 -0.2)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ff4f4fb1-868d-4df0-b74b-0a1ef09c1255")
+	)
+	(fp_line
+		(start -3.375 -2)
+		(end 3.125 -2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "7a69d714-4b8f-4c3c-acc4-4ccc57a953b7")
+	)
+	(fp_line
+		(start -3.375 2)
+		(end -3.375 -2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "f9ab7bfd-318b-4840-ac9a-80e111acf4c1")
+	)
+	(fp_line
+		(start 3.125 -2)
+		(end 3.125 2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "a5630ad4-a31b-410e-8658-8d2681172d09")
+	)
+	(fp_line
+		(start 3.125 2)
+		(end -3.375 2)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "bd39ba9b-b596-4c00-b586-275c9afba245")
+	)
+	(fp_line
+		(start -2.125 -1)
+		(end -2.125 1)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "c12c9cbb-3689-4fd3-88c2-a44ae41baea2")
+	)
+	(fp_line
+		(start -2.125 1)
+		(end 1.175 1)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "cafebf2f-7c98-4ff3-9929-1cf1978063c7")
+	)
+	(fp_line
+		(start 1.175 -1)
+		(end -2.125 -1)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "abbd2471-bf11-4c1d-a566-60bb5b54e15b")
+	)
+	(fp_line
+		(start 1.175 1)
+		(end 1.175 -1)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "f887894e-1e3a-46a4-a7fd-043de0413599")
+	)
+	(fp_text user "${REFERENCE}"
+		(at -0.125 0 0)
+		(layer "F.Fab")
+		(uuid "7ec035a3-3154-41de-acdd-8daad57d4d21")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.254)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at 1.15 0)
+		(size 0.55 1.5)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "18ce04c5-0234-4e1b-884a-82648dc6720f")
+	)
+	(pad "2" smd rect
+		(at -2.1 0)
+		(size 0.55 1.5)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(uuid "c9e200e0-f727-4720-a612-db092a222804")
+	)
+)

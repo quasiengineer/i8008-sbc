@@ -1,0 +1,29 @@
+# INPUT:
+#   C - first term
+#   D - second term
+# OUTPUT:
+#   [B, A] - product
+# NOTES:
+#   C - non modified
+mul8x8:
+  LBI 0x00
+
+  LAD
+  CPB
+  RTZ                    # if (b === 0)
+
+  LAC                    # product = a
+  CPB
+  RTZ                    # if (a === 0)
+
+mul8x8_loop:
+  DCD                    # b = b - 1
+  RTZ                    # if (b === 0)
+
+  ADC
+  JFC mul8x8_loop
+  INB                    # product = product + a
+
+  JMP mul8x8_loop
+
+
