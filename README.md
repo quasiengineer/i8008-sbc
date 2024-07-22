@@ -1,5 +1,8 @@
 # System board for Intel 8008
 
+Video about this project:
+[![Video about this project](./images/youtube.png)](https://www.youtube.com/watch?v=hh_iSX-aM4Q "Video about this project")
+
 ## Board
 
 Schematics in [pdf format](./pcb/schematic.pdf)
